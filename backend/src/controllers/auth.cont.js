@@ -28,8 +28,8 @@ export const signup = async(req,res)=>{
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
             httpOnly: true, // prevents XSS attacks
-            sameSite: "strict", // prevents CSRF attacks
-            secure: process.env.NODE_ENV !== "development",
+            sameSite: "none", // prevents CSRF attacks
+            secure: true,
         });
         
         // Added the success response
@@ -64,8 +64,8 @@ export const login = async(req,res)=>{
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
             httpOnly: true, // prevents XSS attacks
-            sameSite: "strict", // prevents CSRF attacks
-            secure: process.env.NODE_ENV !== "development",
+            sameSite: "none", // prevents CSRF attacks
+            secure: true,
         });
         //send success message
         res.status(201).json({
