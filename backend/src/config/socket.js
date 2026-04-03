@@ -11,7 +11,7 @@ const server = http.createServer(app);
 // 3. Attach Socket.io to the HTTP server
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173"], 
+    origin: ["https://livechat-e2co.onrender.com"], 
   },
 });
 
