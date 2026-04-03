@@ -59,16 +59,20 @@ export const useAuthStore = create((set,get)=>({
         }
     },
 
-    logout: async()=>{
-        try{
+    logout: async () => {
+        try {
             await axiosInstance.post("/auth/logout");
-            set({ authUser: null });
+            set({ authUser: null }); 
+            get().disconnectSocket(); 
             toast.success("Logged Out Successfully");
-            get().disconnectSocket();
+            
+            // Force the browser to reload at the login page to kill all stale memory
+            window.location.href = "/login"; 
+            } 
+        catch (error) {
+            console.log("Error in logging out:", error);
         }
-        catch(error){
-            console.log("Error in logging out user :",error);
-        }
+        
     },
 
     updateProfile: async(data)=>{
