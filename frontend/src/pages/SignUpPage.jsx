@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Mail, User, Lock, EyeOff, Eye, Loader2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,11 +15,29 @@ function SignUpPage() {
   const { signup, isSigningUp } = useAuthStore();
 
   const validateForm = () => {
-    if (!formData.fullName.trim()) return alert("Full name is required");
-    if (!formData.email.trim()) return alert("Email is required");
-    if (!/\S+@\S+\.\S+/.test(formData.email)) return alert("Invalid email format");
-    if (!formData.password) return alert("Password is required");
-    if (formData.password.length < 6) return alert("Password must be at least 6 characters");
+    if (!formData.fullName.trim()) {
+        toast.error("Full name is required");
+        return false;
+    }
+    if (!formData.email.trim()) {
+        toast.error("Email is required");
+        return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        toast.error("Invalid email format");
+        return false;
+    }
+    if (!formData.password) {
+        toast.error("Password is required");
+        return false;
+    }
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    
+    if (!passwordRegex.test(formData.password)) {
+        toast.error("Password must be at least 8 characters long and include a letter, a number, and a special character.");
+        return false;
+    }
+    
     return true;
   };
 
@@ -30,9 +49,6 @@ function SignUpPage() {
   return (
     <div className="min-h-screen flex bg-white">
       
-      {/* ========================================== */}
-      {/* LEFT SIDE - Form Panel (Clean & Focused)   */}
-      {/* ========================================== */}
       <div className="w-full lg:w-[55%] flex flex-col justify-center px-8 sm:px-16 lg:px-24 py-12 relative overflow-hidden">
         
         {/* Subtle background blurs */}
@@ -41,7 +57,6 @@ function SignUpPage() {
 
         <div className="w-full max-w-[540px] mx-auto relative z-10">
           
-          {/* Header Area - Redundant Logo Removed */}
           <div className="mb-10 text-left">
             <h1 className="text-5xl font-black text-slate-900 tracking-tight mb-3">
               Create your account

@@ -10,6 +10,14 @@ export const signup = async(req,res)=>{
         if(!email || !fullName || !password){
             return res.status(400).json({message:"All fields are required"});
         }
+        //Backend password validation
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({ 
+                message: "Password must be at least 8 characters and include a letter, number, and special character" 
+            });
+        }
+        
         const user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: "Email already exists" });
 
