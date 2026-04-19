@@ -56,6 +56,7 @@ function LoginPage() {
                   </div>
                   <input
                     type="email"
+                    autoComplete="off"
                     className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition-all text-slate-900 font-medium placeholder:text-slate-400"
                     placeholder="you@example.com"
                     required
@@ -79,6 +80,7 @@ function LoginPage() {
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
+                    autoComplete="new-password"
                     className="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition-all text-slate-900 font-medium placeholder:text-slate-400"
                     placeholder="••••••••"
                     required
