@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import {app,server} from "./config/socket.js";
 
+
 dotenv.config();
 
 app.use(express.json({ limit: "10mb" }));
@@ -19,7 +20,6 @@ app.use(cors({
 
 app.use("/api/auth",authRoutes);
 app.use("/api/message",messageRoutes);
-
 
 const PORT=process.env.PORT || 5001;
 server.listen(PORT,()=>{

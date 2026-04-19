@@ -52,7 +52,10 @@ export const useAuthStore = create((set,get)=>({
             get().connectSocket();
         }
         catch(error){
-            console.error("Error in login:", error.response?.data?.message || error.message);
+            const errorMessage = error.response?.data?.message || "Internal Server Error";
+            console.error("Error in login:", errorMessage);
+            toast.error(errorMessage);
+
         }
         finally {
             set({ isLoggingIn: false });
