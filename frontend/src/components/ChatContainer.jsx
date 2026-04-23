@@ -37,7 +37,7 @@ const ChatContainer = ()=> {
 
     if(isMessagesLoading){
         return (
-            <div className="flex-1 flex flex-col overflow-hidden w-full">
+            <div className="flex-1 flex flex-col overflow-hidden w-full h-full min-w-0">
                 <ChatHeader/>
                 <div className="flex-1 flex items-center justify-center bg-slate-50 transition-all duration-200">
                     <Loader2 className="size-8 animate-spin text-blue-600" />
@@ -48,10 +48,10 @@ const ChatContainer = ()=> {
     }
 
     return(
-        <div className="flex-1 flex flex-col overflow-hidden w-full">
+        <div className="flex-1 flex flex-col overflow-hidden w-full h-full min-w-0">
             <ChatHeader/>
-
-            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 sm:space-y-6">
+            
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-5 space-y-4 sm:space-y-5 lg:space-y-6 min-h-0">
                 
                 {messages.map((message) => {
                 const isOwnMessage = message.senderId === authUser._id;
@@ -61,14 +61,14 @@ const ChatContainer = ()=> {
                     key={message._id}
                     className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}
                     >
-                    <div className={`flex gap-2 sm:gap-3 max-w-[85%] sm:max-w-[75%] lg:max-w-[65%] ${isOwnMessage ? "flex-row-reverse" : "flex-row"}`}>
+                    <div className={`flex gap-2 sm:gap-3 md:gap-4 max-w-[85%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[65%] ${isOwnMessage ? "flex-row-reverse" : "flex-row"}`}>
                         
                         {/* 1. Avatar */}
                         <div className="shrink-0">
                         <img
                             src={isOwnMessage ? (authUser.profilePic || "/avatar.png") : (selectedUser.profilePic || "/avatar.png")}
                             alt="profile"
-                            className="size-6 sm:size-8 rounded-full object-cover border border-slate-200 shadow-sm mt-auto"
+                            className="size-6 sm:size-8 md:size-10 rounded-full object-cover border border-slate-200 shadow-sm mt-auto"
                         />
                         </div>
 
@@ -76,7 +76,7 @@ const ChatContainer = ()=> {
                         <div className="flex flex-col gap-1 min-w-0">
                         {/* Bubble */}
                         <div
-                            className={`flex flex-col p-2.5 sm:p-3 shadow-sm
+                            className={`flex flex-col p-2.5 sm:p-3 md:p-4 shadow-sm
                             ${
                                 isOwnMessage
                                 ? "bg-blue-600 text-white rounded-2xl rounded-br-sm" 
@@ -89,14 +89,14 @@ const ChatContainer = ()=> {
                             <img
                                 src={message.image}
                                 alt="Attachment"
-                                className="max-w-[160px] sm:max-w-[200px] rounded-xl mb-1 sm:mb-2 object-cover"
+                                className="max-w-[160px] sm:max-w-[200px] md:max-w-[250px] rounded-xl mb-1 sm:mb-2 md:mb-3 object-cover"
                                 onLoad={() => messageEndRef.current?.scrollIntoView({ behavior: "smooth" })}
                             />
                             )}
                             
                             {/* Render Text if it exists */}
                             {message.text && (
-                            <p className="text-sm sm:text-[15px] leading-relaxed break-words">
+                            <p className="text-sm sm:text-[15px] md:text-base leading-relaxed break-words">
                                 {message.text}
                             </p>
                             )}
@@ -104,7 +104,7 @@ const ChatContainer = ()=> {
 
                         {/* 3. Timestamp */}
                         <div
-                            className={`text-[9px] sm:text-[10px] font-medium text-slate-400 ${
+                            className={`text-[9px] sm:text-[10px] md:text-xs font-medium text-slate-400 ${
                             isOwnMessage ? "text-right" : "text-left"
                             } px-1`}
                         >
