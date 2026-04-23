@@ -25,12 +25,10 @@ function App(){
     }
 
     return (
-      <div className="flex flex-col h-[100dvh] overflow-hidden">
-        
+      <div className="flex flex-col min-h-screen">
         <Toaster position="top-center" reverseOrder={false} />
         <NavBar />
-        
-        <main className="flex-1 pt-16 overflow-hidden flex flex-col"> 
+        <main className="flex-1 pt-16"> 
           <Routes>
             <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
             <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
