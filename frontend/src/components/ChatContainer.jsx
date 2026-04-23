@@ -37,7 +37,7 @@ const ChatContainer = ()=> {
 
     if(isMessagesLoading){
         return (
-            <div className="flex-1 flex flex-col overflow-auto w-full">
+            <div className="flex-1 flex flex-col overflow-hidden w-full">
                 <ChatHeader/>
                 <div className="flex-1 flex items-center justify-center bg-slate-50 transition-all duration-200">
                     <Loader2 className="size-8 animate-spin text-blue-600" />
@@ -48,8 +48,9 @@ const ChatContainer = ()=> {
     }
 
     return(
-        <div className="flex-1 flex flex-col overflow-auto w-full">
+        <div className="flex-1 flex flex-col overflow-hidden w-full">
             <ChatHeader/>
+
             <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 sm:space-y-6">
                 
                 {messages.map((message) => {
@@ -61,7 +62,8 @@ const ChatContainer = ()=> {
                     className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}
                     >
                     <div className={`flex gap-2 sm:gap-3 max-w-[85%] sm:max-w-[75%] lg:max-w-[65%] ${isOwnMessage ? "flex-row-reverse" : "flex-row"}`}>
-        
+                        
+                        {/* 1. Avatar */}
                         <div className="shrink-0">
                         <img
                             src={isOwnMessage ? (authUser.profilePic || "/avatar.png") : (selectedUser.profilePic || "/avatar.png")}
@@ -69,8 +71,10 @@ const ChatContainer = ()=> {
                             className="size-6 sm:size-8 rounded-full object-cover border border-slate-200 shadow-sm mt-auto"
                         />
                         </div>
+
+                        {/* 2. Message Content */}
                         <div className="flex flex-col gap-1 min-w-0">
-                        
+                        {/* Bubble */}
                         <div
                             className={`flex flex-col p-2.5 sm:p-3 shadow-sm
                             ${
@@ -80,6 +84,7 @@ const ChatContainer = ()=> {
                             }
                             `}
                         >
+                            {/* Render Image if it exists */}
                             {message.image && (
                             <img
                                 src={message.image}
@@ -88,6 +93,7 @@ const ChatContainer = ()=> {
                             />
                             )}
                             
+                            {/* Render Text if it exists */}
                             {message.text && (
                             <p className="text-sm sm:text-[15px] leading-relaxed break-words">
                                 {message.text}
@@ -95,6 +101,7 @@ const ChatContainer = ()=> {
                             )}
                         </div>
 
+                        {/* 3. Timestamp */}
                         <div
                             className={`text-[9px] sm:text-[10px] font-medium text-slate-400 ${
                             isOwnMessage ? "text-right" : "text-left"
@@ -112,6 +119,7 @@ const ChatContainer = ()=> {
                 <div ref={messageEndRef} />
 
             </div>
+            
             <MessageInput/>
         </div>
     )
