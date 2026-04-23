@@ -7,23 +7,13 @@ function HomePage() {
   const { selectedUser } = useMessageStore();
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 overflow-hidden">
-
-      <div className="flex-1 flex sm:p-4 overflow-hidden">
-        
-        <div className="bg-white w-full max-w-7xl mx-auto h-full flex flex-row overflow-hidden
-                        rounded-none sm:rounded-3xl
-                        border-0 sm:border sm:border-slate-100
-                        shadow-none sm:shadow-2xl">
-          
-          <Sidebar />
-
-          {!selectedUser ? (
-            <NoChatSelected />
-          ) : (
-            <ChatContainer />
-          )}
-
+    <div className="h-full w-full bg-slate-50 overflow-hidden">
+      <div className="flex items-center justify-center p-4 h-full">
+        <div className="bg-white rounded-3xl shadow-xl w-full max-w-7xl h-full overflow-hidden">
+          <div className="flex h-full">
+            <SideBar />
+            {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+          </div>
         </div>
       </div>
     </div>

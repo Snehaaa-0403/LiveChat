@@ -48,9 +48,9 @@ const ChatContainer = ()=> {
     }
 
     return(
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden h-full">
             <ChatHeader/>
-            <div className="flex-1 overflow-y-auto p-4 space-y-6">
+            <div className="flex-1 overflow-y-auto p-4 space-y-6 min-h-0">
                 
                 {messages.map((message) => {
                 const isOwnMessage = message.senderId === authUser._id;

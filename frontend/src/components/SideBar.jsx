@@ -20,8 +20,8 @@ const SideBar = () => {
   }
 
   return (
-    <aside className="h-full w-20 lg:w-72 border-r border-slate-200 flex flex-col bg-white transition-all duration-200">
-      <div className="p-3 sm:p-5 border-b border-slate-200 w-full flex items-center justify-center lg:justify-start gap-3">
+    <aside className="h-full w-20 lg:w-72 border-r border-slate-200 flex flex-col bg-white overflow-hidden transition-all duration-200">
+      <div className="p-3 sm:p-5 border-b border-slate-200 w-full flex items-center justify-center lg:justify-start gap-3 shrink-0">
         <div className="p-1.5 sm:p-2 bg-blue-50 text-blue-600 rounded-xl shrink-0">
           <Users className="size-5" />
         </div>
@@ -30,7 +30,7 @@ const SideBar = () => {
         </span>
       </div>
 
-      <div className="overflow-y-auto w-full py-2">
+      <div className="overflow-y-auto flex-1 min-h-0 w-full py-2">
         {users.map((user) => (
           <button
             key={user._id}
