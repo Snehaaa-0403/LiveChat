@@ -7,15 +7,19 @@ function HomePage() {
   const { selectedUser } = useMessageStore();
 
   return (
-    <div className="h-screen bg-slate-50">
-      <div className="flex items-center justify-center pt-20 px-4">
-        {/* Main Dashboard Container */}
-        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-7xl h-[calc(100vh-8rem)] border border-slate-100 overflow-hidden">
-          <div className="flex h-full rounded-3xl">
+    <div className="h-screen bg-slate-50 flex flex-col">
+      
+      <div className="flex-1 flex items-center justify-center pt-20 pb-4 sm:px-4">
+        
+        <div className="bg-white w-full max-w-7xl h-full overflow-hidden
+                        rounded-none sm:rounded-3xl
+                        border-0 sm:border sm:border-slate-100
+                        shadow-none sm:shadow-2xl">
+          
+          <div className="flex h-full sm:rounded-3xl overflow-hidden">
             
             <Sidebar />
 
-            {/* 2. Chat Area - Dynamic Content */}
             {!selectedUser ? (
               <NoChatSelected />
             ) : (

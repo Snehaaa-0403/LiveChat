@@ -1,7 +1,7 @@
 import { useMessageStore } from "../store/useMessageStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { useEffect, useRef } from "react"; // 🛠️ 1. Imported useRef
-import { Users, Loader2 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Loader2 } from "lucide-react"; 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 
@@ -17,7 +17,6 @@ const ChatContainer = ()=> {
     const {messages,getMessages,isMessagesLoading,selectedUser,setSelectedUser,subscribeToMessages,unsubscribeFromMessages }=useMessageStore();
     const{authUser}=useAuthStore();
     
-    // 🛠️ 2. Create the reference anchor
     const messageEndRef = useRef(null);
     
     useEffect(()=>{
@@ -26,13 +25,11 @@ const ChatContainer = ()=> {
         return()=> unsubscribeFromMessages();
     },[selectedUser._id,getMessages]);
 
-    // 🛠️ 3. Add the auto-scroll effect
     useEffect(() => {
-        // A tiny timeout ensures the DOM has painted the new messages before trying to scroll
         setTimeout(() => {
             if (messageEndRef.current && messages) {
                 messageEndRef.current.scrollIntoView({ 
-                    behavior: "smooth" // Note: Change "smooth" to "auto" if you want an instant, jump-like scroll instead of a gliding animation
+                    behavior: "smooth"
                 });
             }
         }, 100);
@@ -40,25 +37,22 @@ const ChatContainer = ()=> {
 
     if(isMessagesLoading){
         return (
-            <div>
+            <div className="flex-1 flex flex-col overflow-auto w-full">
                 <ChatHeader/>
-                <aside className="h-full w-20 lg:w-72 border-r border-slate-200 flex flex-col items-center justify-center bg-white transition-all duration-200">
+                <div className="flex-1 flex items-center justify-center bg-slate-50 transition-all duration-200">
                     <Loader2 className="size-8 animate-spin text-blue-600" />
-                </aside>
+                </div>
                 <MessageInput/>
             </div>
             );
     }
 
     return(
-        <div className="flex-1 flex flex-col overflow-auto">
+        <div className="flex-1 flex flex-col overflow-auto w-full">
             <ChatHeader/>
-            {/* Displaying Messages */}
-            {/* Messages Scrollable Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-6">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 sm:space-y-6">
                 
                 {messages.map((message) => {
-                // Check if the logged-in user sent this specific message
                 const isOwnMessage = message.senderId === authUser._id;
 
                 return (
@@ -66,49 +60,43 @@ const ChatContainer = ()=> {
                     key={message._id}
                     className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}
                     >
-                    <div className={`flex gap-3 max-w-[75%] lg:max-w-[65%] ${isOwnMessage ? "flex-row-reverse" : "flex-row"}`}>
-                        
-                        {/* 1. Avatar */}
+                    <div className={`flex gap-2 sm:gap-3 max-w-[85%] sm:max-w-[75%] lg:max-w-[65%] ${isOwnMessage ? "flex-row-reverse" : "flex-row"}`}>
+        
                         <div className="shrink-0">
                         <img
                             src={isOwnMessage ? (authUser.profilePic || "/avatar.png") : (selectedUser.profilePic || "/avatar.png")}
                             alt="profile"
-                            className="size-8 rounded-full object-cover border border-slate-200 shadow-sm mt-auto"
+                            className="size-6 sm:size-8 rounded-full object-cover border border-slate-200 shadow-sm mt-auto"
                         />
                         </div>
-
-                        {/* 2. Message Content */}
-                        <div className="flex flex-col gap-1">
-                        {/* Bubble */}
+                        <div className="flex flex-col gap-1 min-w-0">
+                        
                         <div
-                            className={`flex flex-col p-3 shadow-sm
+                            className={`flex flex-col p-2.5 sm:p-3 shadow-sm
                             ${
                                 isOwnMessage
-                                ? "bg-blue-600 text-white rounded-2xl rounded-br-sm" // Sender styling
-                                : "bg-white text-slate-900 border border-slate-200 rounded-2xl rounded-bl-sm" // Receiver styling
+                                ? "bg-blue-600 text-white rounded-2xl rounded-br-sm" 
+                                : "bg-white text-slate-900 border border-slate-200 rounded-2xl rounded-bl-sm" 
                             }
                             `}
                         >
-                            {/* Render Image if it exists */}
                             {message.image && (
                             <img
                                 src={message.image}
                                 alt="Attachment"
-                                className="sm:max-w-[200px] rounded-xl mb-2 object-cover"
+                                className="max-w-[160px] sm:max-w-[200px] rounded-xl mb-1 sm:mb-2 object-cover"
                             />
                             )}
                             
-                            {/* Render Text if it exists */}
                             {message.text && (
-                            <p className="text-[15px] leading-relaxed">
+                            <p className="text-sm sm:text-[15px] leading-relaxed break-words">
                                 {message.text}
                             </p>
                             )}
                         </div>
 
-                        {/* 3. Timestamp */}
                         <div
-                            className={`text-[10px] font-medium text-slate-400 ${
+                            className={`text-[9px] sm:text-[10px] font-medium text-slate-400 ${
                             isOwnMessage ? "text-right" : "text-left"
                             } px-1`}
                         >
@@ -121,7 +109,6 @@ const ChatContainer = ()=> {
                 );
                 })}
 
-                {/* 🛠️ 4. The invisible anchor point */}
                 <div ref={messageEndRef} />
 
             </div>
