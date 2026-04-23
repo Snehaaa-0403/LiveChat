@@ -11,12 +11,11 @@ import { Toaster } from "react-hot-toast";
 
 function App(){
     const { checkAuth,authUser,isCheckingAuth,onlineUsers } = useAuthStore();
-    console.log(onlineUsers);
+    
     useEffect(()=>{
       checkAuth();
     },[checkAuth]);
 
-    console.log({authUser});
     if(isCheckingAuth){
       return(
           <div className="flex items-center justify-center h-screen">
@@ -26,11 +25,12 @@ function App(){
     }
 
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col h-[100dvh] overflow-hidden">
+        
         <Toaster position="top-center" reverseOrder={false} />
         <NavBar />
-        {/* Adding a top margin here ensures the page content starts AFTER the 16px (h-16) Navbar */}
-        <main className="flex-1 pt-16"> 
+        
+        <main className="flex-1 pt-16 overflow-hidden flex flex-col"> 
           <Routes>
             <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
             <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
