@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cloudinary from "../config/cloudinary.js";
-
+import { redis } from "../config/redis.js";
 
 export const signup = async(req,res)=>{
     const {fullName,email,password} = req.body;
@@ -28,6 +28,11 @@ export const signup = async(req,res)=>{
             email,
             password:hashesPassword
         });
+        
+        const keys = await redis.keys("sidebar_users:*");
+        if (keys.length > 0) {
+            await redis.del(keys); // Deletes all matching keys at once
+        }
 
         //generateToken
         const token=jwt.sign({userId:newUser._id},process.env.JWT_SECRET,{
@@ -65,6 +70,12 @@ export const login = async(req,res)=>{
         if(!isPasswordCorrect){
             return res.status(400).json({message:"Invalid Credentials"});
         }
+
+        const keys = await redis.keys("sidebar_users:*");
+        if (keys.length > 0) {
+            await redis.del(keys); // Deletes all matching keys at once
+        }
+
         //genrate Token(Valid User)
         const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{
             expiresIn:"7d"

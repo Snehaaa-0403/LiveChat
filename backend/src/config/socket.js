@@ -1,41 +1,53 @@
 import { Server } from "socket.io";
 import http from "http";
 import express from "express";
+import { redis } from "./redis.js"; 
 
-// 1. Create the Express app here instead of index.js
 const app = express();
-
-// 2. Create a standard HTTP server on top of the Express app
 const server = http.createServer(app);
 
-// 3. Attach Socket.io to the HTTP server
 const io = new Server(server, {
-  cors: {
-    origin: ["https://livechat-e2co.onrender.com"], 
-  },
+    cors: {
+        origin: ["http://localhost:5173"], 
+        methods: ["GET", "POST"],
+    },
 });
 
-export function getRecieverSocketId(userID) {
-    return userSocketMap[userID];
-}
+export const getReceiverSocketId = async (receiverId) => {
+    return await redis.get(`user_socket:${receiverId}`);
+};
 
-//used to store all online users
-const userSocketMap={};
-// 4. Listen for incoming connections
-io.on("connection", (socket) => {
-  console.log("A user connected with socket id:", socket.id);
-  const userId=socket.handshake.query.userId;
-  if(userId) userSocketMap[userId]=socket.id
+io.on("connection", async (socket) => {
+    console.log("A user connected:", socket.id);
+    const userId = socket.handshake.query.userId;
 
-  //io.emit() is used to send events to all connected clients
-  io.emit("getOnlineUsers",Object.keys(userSocketMap));
+    if (userId && userId !== "undefined") {
+        // Save to Redis: Link their ID to this specific network pipe
+        await redis.set(`user_socket:${userId}`, socket.id);
+        // Save to Redis: Add them to the master online list
+        await redis.sadd("online_users", userId);
+    }
 
-  // Listen for disconnections
-  socket.on("disconnect", () => {
-    console.log("A user disconnected:", socket.id);
-    delete userSocketMap[userId];
-    io.emit("getOnlineUsers",Object.keys(userSocketMap));
-  });
+    // Grab the fresh list of online users from Redis and broadcast it
+    const currentOnlineUsers = await redis.smembers("online_users");
+    io.emit("getOnlineUsers", currentOnlineUsers);
+
+    
+    socket.on("disconnect", async () => {
+        console.log("User disconnected:", socket.id);
+
+        if (userId && userId !== "undefined") {
+            // Remove from Redis: Delete their network pipe record
+            await redis.del(`user_socket:${userId}`);
+            
+            // Remove from Redis: Take them off the online list
+            await redis.srem("online_users", userId);
+
+            // Grab the updated list and broadcast it so their green dot disappears
+            const updatedOnlineUsers = await redis.smembers("online_users");
+            io.emit("getOnlineUsers", updatedOnlineUsers);
+        }
+    });
 });
 
 export { app, io, server };
